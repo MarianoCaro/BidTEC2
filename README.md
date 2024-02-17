@@ -1,71 +1,87 @@
-# Guest Book 📖 
-[![](https://img.shields.io/badge/⋈%20Examples-Basics-green)](https://docs.near.org/tutorials/welcome)
-[![](https://img.shields.io/badge/Gitpod-Ready-orange)](https://gitpod.io/#/https://github.com/near-examples/guest-book-js)
-[![](https://img.shields.io/badge/Contract-js-yellow)](https://docs.near.org/develop/contracts/anatomy)
-[![](https://img.shields.io/badge/Frontend-React-blue)](https://docs.near.org/develop/integrate/frontend)
-[![Build Status](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fnear-examples%2Fguest-book-js%2Fbadge&style=flat&label=Tests)](https://actions-badge.atrox.dev/near-examples/guest-book-js/goto)
+# BidTEC :fa-gavel::tw-303d: 
+
+**Tabla de contenido**
+
+[TOCM]
+
+[![Subasta_BidTEC](https://dircomfidencial.com/wp-content/uploads/2021/04/Sin-titulo.png "Subasta_BidTEC")](https://dircomfidencial.com/wp-content/uploads/2021/04/Sin-titulo.png "Subasta_BidTEC")
+
+BidTEC es un sistema para organizar subastas descentralizadas, donde los usuarios podrán pujar utilizando tokens NEAR y el contrato inteligente gestionaría la subasta. 
+
+# Lo que se espera 
+
+1. Instalar las dependencias necesarias.
+2. Acceder y analizar el contrato inteligente que se desarrolló utilizando la tecnología `NEAR`.
+3. Probar el contrato realizando pruebas unitarias.
+4. Desplegar el contrato en la red usando `testnet`.
+5. Realizar peticiones al contrato inteligente.
 
 
-The Guest Book is a simple app that stores messages from users, allowing to pay for a premium message.
+# Iniciar
 
-![](https://docs.near.org/assets/images/guest-book-b305a87a35cbef2b632ebe289d44f7b2.png)
+Clona este repositorio localmente o [**ábrelo en Gitpod**](https://gitpod.io/#/github.com/near-examples/guest_book-js), luego sigue estos pasos:
 
+### 1. Instalar las dependencias
+Para instalar las dependencias, debemos dirigirnos a la terminal y escribir el siguiente comando:  `npm install`
 
-# What This Example Shows
+### 2. Abrir el contrato inteligente
+Para ello, nos dirigimos al archivo `contract.ts`
 
-1. How to receive $NEAR on a contract.
-2. How to store and retrieve information from the blockchain.
-3. How to use a `Vector`.
-4. How to interact with a contract from `React JS`.
+### 3. Analizar el código del contrato
+Al abrir el archivo que contiene nuestro contrato inteligente, nos encontraremos con una clase principal llamada `Subasta`, la cual cuenta con un vector que almacena objetos de tipo MakeBid y una variable que actúa como acumulador para el total de créditos.
 
-<br />
+    class Subasta {
+    bids: Vector<MakeBid> = new Vector<MakeBid>("v-uid");
+    totalx: number = 0;
+	...
 
-# Quickstart
+Después, tenemos la función `add_bid`, que se llama cuando se realiza una oferta y está marcada con `@call`, indicando que es una función modificadora del estado del contrato.
 
-Clone this repository locally or [**open it in gitpod**](https://gitpod.io/#/github.com/near-examples/guest_book-js). Then follow these steps:
+    @call({ payableFunction: true })
+    add_bid( {cantidad} : {cantidad : number}): void {
 
-### 1. Install Dependencies
+La función `total_bid` está marcada con `@view`, lo que indica que es solo de lectura y no modifica el estado del contrato. Solo imprime en la consola algunos detalles relacionados con las ofertas almacenadas y devuelve un mensaje describiendo el total de ofertas.
+
+    @view({})
+    total_bid(): string {
+    
+    
+# Ejecución
+### 1. Probar el contrato
+Después de analizar el funcionamiento del código del contrato, podemos realizar pruebas. Para ello, nos dirigimos a la terminal y escribimos el siguiente comando: `npm test`
+
+**Nota**
+Si al ejecutar el comando nos arroja lo siguiente:
+>`./build.sh: Permission denied`
+
+Basta con conceder permisos al archivo, por lo que debemos escribir el siguiente comando para solucionarlo:
+                    
+>`chmod +x contract/build.sh`
+
+### 2. Desplegar el contrato
+Para finalizar, se realizará el despliegue del contrato en un entorno de pruebas para simular las interacciones por parte de usuarios. Para ello, debemos tener una cuenta creada en testnet. Si aún no la tienes, [**creala aquí**](https://testnet.mynearwallet.com/). Necesitamos crear una cuenta personal y otra para el proyecto.
+
+Ahora, en la terminal, iniciamos sesión usando `near login` y luego escribimos:
 ```bash
-npm install
+  ./deploy.sh
+  near deploy bidtec.testnet contract/build/contract.wasm
+```
+**Nota**
+>`bidtec.testnet`
+
+Es la cuenta del proyecto creada en testnet.
+
+### 3. Realizar peticiones 
+Ahora ejecutaremos la función `total_bid` anteriormente analizada para consultar la información actual sobre las ofertas acumuladas en el contrato. En la terminal, debemos escribir:
+```bash
+ near view bidtec.testnet total_bid
+```
+Después, ejecutamos la función `add_bid` intentado realizar una oferta de 1 crédito al contrato  `bidtec.testnet` desde la cuenta  `marianoc14.testnet`
+```bash
+near call bidtec.testnet add_bid '{"cantidad": 1}' --amount 0.1 --accountId marianoc14.testnet
 ```
 
-### 2. Test the Contract
-Deploy your contract in a sandbox and simulate interactions from users.
+**Nota**
+>`marianoc14.testnet`
 
-```bash
-npm test
-```
-
-### 3. Deploy the Contract
-Build the contract and deploy it in a testnet account
-```bash
-./deploy.sh
-```
-
-### 4. Get Messages
-
-```bash
-near view librovisitas.testnet get_messages '{"from_index":0, "limit":10}'
-```
-
-## 5. Add New Message
-
-```bash
-near call librovisitas.testnet add_message '{"text": "Primer mensaje"}' --accountId yairnava.testnet
-```
-
-```bash
-near call owaguestbook.testnet add_message '{"text": "Primer mensaje premium"}' --amount 0.1 --accountId yairnava.testnet
-```
-
-## 6. Get Total Messages
-
-```bash
-near view guestbook1.testnet total_messages
-```
-
----
-
-# Learn More
-1. Learn more about the contract through its [README](./contract/README.md).
-2. Check [**our documentation**](https://docs.near.org/develop/welcome).
+Es el nombre de la cuenta personal que se creó en testent.
