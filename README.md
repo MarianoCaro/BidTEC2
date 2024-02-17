@@ -1,8 +1,4 @@
-# BidTEC :fa-gavel::tw-303d: 
-
-**Tabla de contenido**
-
-[TOCM]
+# 🪙BidTEC
 
 [![Subasta_BidTEC](https://dircomfidencial.com/wp-content/uploads/2021/04/Sin-titulo.png "Subasta_BidTEC")](https://dircomfidencial.com/wp-content/uploads/2021/04/Sin-titulo.png "Subasta_BidTEC")
 
@@ -64,8 +60,11 @@ Para finalizar, se realizará el despliegue del contrato en un entorno de prueba
 Ahora, en la terminal, iniciamos sesión usando `near login` y luego escribimos:
 ```bash
   ./deploy.sh
+```
+```bash
   near deploy bidtec.testnet contract/build/contract.wasm
 ```
+
 **Nota**
 >`bidtec.testnet`
 
