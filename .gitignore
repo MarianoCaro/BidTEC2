@@ -1,25 +1,28 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+# Developer note: near.gitignore will be renamed to .gitignore upon project creation
+# dependencies
 node_modules
 /.pnp
 .pnp.js
 
-build
-/out
-/dist
-/node_modules
-/.parcel-cache
+# build
+**/out
+**/dist
+**/node_modules
+**/.parcel-cache
 
-keys
-/neardev
+# keys
+**/neardev
 
-testing
+# testing
 /coverage
-/videos
-/screenshots
+**/videos
+**/screenshots
 
-production
-/build
+# production
+**/build
 
-misc
+# misc
 .DS_Store
 .env.local
 .env.development.local

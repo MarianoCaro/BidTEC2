@@ -51,7 +51,7 @@ test("Juanito completo exitosamente una puja de 3 creditos", async (t) => {
 });
 test("Patricio no logro completar una puja porque le hacen falta creditos", async (t) => {
   const { contract, patricio } = t.context.accounts;
-  await patricio.call(contract, "add_bid", { cantidad: 0 }, { attachedDeposit: NEAR.parse('0') });
+  await patricio.call(contract, "add_bid", { total: 0 }, { attachedDeposit: NEAR.parse('0') });
   const totalBids = await contract.view("total_bid");
   t.is(totalBids, "El total de pujas fue de: 1 con un valor de: 0 creditos.");
 });
